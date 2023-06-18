@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<beans>
+    <bean id="userDao" class="cn.lei.test.bean.UserDao"></bean>
+
+    <bean id="userService" class="cn.lei.test.bean.UserService">
+        <property name="uId" value="10001"></property>
+        <property name="company" value="腾讯"></property>
+        <property name="location" value="深圳"></property>
+        <property name="userDao" ref="userDao"></property>
+    </bean>
+
+    <bean class="cn.lei.test.common.MyBeanFactoryPostProcessor"></bean>
+    <bean class="cn.lei.test.common.MyBeanPostProcessor"></bean>
+
+</beans>

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<beans>
+
+
+    <bean id="userService" class="cn.lei.test.bean.UserService" scope="prototype">
+        <property name="uId" value="10001"></property>
+        <property name="company" value="腾讯"></property>
+        <property name="location" value="深圳"></property>
+        <property name="userDao" ref="proxyUserDao"></property>
+    </bean>
+
+    <bean id="proxyUserDao" class="cn.lei.test.bean.ProxyBeanFactory"
+    ></bean>
+</beans>

@@ -1,0 +1,91 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:batch="http://www.springframework.org/schema/batch"
+       xsi:schemaLocation="http://www.springframework.org/schema/aop https://www.springframework.org/schema/aop/spring-aop.xsd
+		http://www.springframework.org/schema/batch https://www.springframework.org/schema/batch/spring-batch.xsd
+		http://www.springframework.org/schema/beans https://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <batch:job id="job" >
+        <batch:step id="stepA" next="step_first">
+            <batch:tasklet ref="step1Bean"></batch:tasklet>
+        </batch:step>
+        <batch:step id="step_first" next="step_7">
+            <batch:tasklet ref="step2Bean" ></batch:tasklet>
+        </batch:step>
+<!--        <batch:step id="step_sec" next="step_2">-->
+<!--            <batch:tasklet ref="step3Bean" ></batch:tasklet>-->
+<!--        </batch:step>-->
+<!--        <batch:step id="step_2" next="step_3">-->
+<!--            <batch:tasklet ref="step4Bean" ></batch:tasklet>-->
+<!--        </batch:step>-->
+<!--        <batch:step id="step_3" next="step_4">-->
+<!--            <batch:tasklet ref="step5Bean" ></batch:tasklet>-->
+<!--        </batch:step>-->
+        <batch:step id="step_7" >
+            <batch:tasklet ref="step7Bean" ></batch:tasklet>
+        </batch:step>
+
+<!--        <batch:step id="stepA" >-->
+<!--            <batch:tasklet ref="step1Bean"></batch:tasklet>-->
+<!--        </batch:step>-->
+<!--        <batch:split id="split1" task-executor="taskexecutor" next="stepB">-->
+<!--            <batch:flow>-->
+<!--                <batch:step id="step1">-->
+<!--                    <batch:tasklet ref="step2Bean" ></batch:tasklet>-->
+<!--                </batch:step>-->
+<!--            </batch:flow>-->
+<!--            <batch:flow>-->
+<!--                <batch:step id="step2">-->
+<!--                    <batch:tasklet ref="step3Bean" ></batch:tasklet>-->
+<!--                </batch:step>-->
+<!--            </batch:flow>-->
+<!--        </batch:split>-->
+<!--        <batch:step id="stepB" next="split2">-->
+<!--            <batch:tasklet ref="step4Bean"></batch:tasklet>-->
+<!--        </batch:step>-->
+<!--        <batch:split id="split2" task-executor="taskexecutor" >-->
+<!--            <batch:flow>-->
+<!--                <batch:step id="step3">-->
+<!--                    <batch:tasklet ref="step5Bean" ></batch:tasklet>-->
+<!--                </batch:step>-->
+<!--            </batch:flow>-->
+<!--            <batch:flow>-->
+<!--                <batch:step id="step4">-->
+<!--                    <batch:tasklet ref="step6Bean" ></batch:tasklet>-->
+<!--                </batch:step>-->
+<!--            </batch:flow>-->
+<!--        </batch:split>-->
+
+    </batch:job>
+
+
+    <bean id="taskexecutor" class="org.springframework.core.task.SimpleAsyncTaskExecutor">
+        <property name="threadNamePrefix" value="spring_batch"></property>
+        <property name="concurrencyLimit" value="2"></property>
+    </bean>
+    <bean id="jobLauncher" class="org.springframework.batch.core.launch.support.SimpleJobLauncher">
+        <property name="jobRepository" ref="jobRepository"/>
+    </bean>
+
+    <bean id="jobRepository" class="org.springframework.batch.core.repository.support.MapJobRepositoryFactoryBean">
+    </bean>
+
+    <bean id="transactionManager" class="org.springframework.batch.support.transaction.ResourcelessTransactionManager"/>
+
+
+    <bean id="step1Bean" class="com.lyx.batch.steps.step1">
+        <property name="organizations">
+            <list>
+                <value>哈哈</value>
+                <value>嘿嘿</value>
+            </list>
+        </property>
+    </bean>
+    <bean id="step2Bean" class="com.lyx.batch.steps.step2"></bean>
+    <bean id="step3Bean" class="com.lyx.batch.steps.step3"></bean>
+    <bean id="step4Bean" class="com.lyx.batch.steps.step4"></bean>
+    <bean id="step5Bean" class="com.lyx.batch.steps.step5"></bean>
+    <bean id="step6Bean" class="com.lyx.batch.steps.step6"></bean>
+    <bean id="step7Bean" class="com.lyx.batch.steps.step7"></bean>
+
+</beans>
