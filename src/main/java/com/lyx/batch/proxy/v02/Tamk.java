@@ -3,6 +3,9 @@ package com.lyx.batch.proxy.v02;
 
 import com.lyx.batch.factory.MoveAble;
 
+import java.lang.reflect.InvocationHandler;
+import java.lang.reflect.Method;
+import java.lang.reflect.Proxy;
 import java.util.Random;
 
 interface Movable {
@@ -28,7 +31,27 @@ public class Tamk implements Movable {
     }
 
     public static void main(String[] args) {
-        new TankLogProxy(new TankTimeProxy(new Tamk())).move();
+//        new TankLogProxy(new TankTimeProxy(new Tamk())).move();
+        System.setProperty("sun.misc.ProxyGenerator.saveGeneratedFiles", "true");
+        Movable o = (Movable) Proxy.newProxyInstance(Tamk.class.getClassLoader(), Tamk.class.getInterfaces(),
+                new LogHandler(new Tamk()));
+        o.move();
+
+    }
+}
+
+class LogHandler implements InvocationHandler {
+    Tamk tamk;
+    public LogHandler(Tamk tamk){
+        this.tamk = tamk;
+    }
+
+    @Override
+    public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+        System.out.println("method " + method.getName() + " start..");
+        Object invoke = method.invoke(tamk, args);
+        System.out.println("method " + method.getName() + " end..");
+        return invoke;
     }
 }
 
